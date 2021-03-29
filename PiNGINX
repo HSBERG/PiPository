@@ -1,0 +1,50 @@
+# Credits to wunderground for the script
+
+> mkdir NGINX && cd NGINX
+> nano config.json
+
+# In the config we're going to put
+
+{
+  "database": {
+    "engine": "mysql",
+    "host": "db",
+    "name": "npm",
+    "user": "<Username>",
+    "password": "<Password>",
+    "port": 3306
+  }
+}
+
+
+# Cool yeah that's done, whatever.
+# Next is the docker-compose file, which is the easy part. 
+
+> nano docker-compose.yml
+
+version: '3'
+services:
+  app:
+    image: 'jc21/nginx-proxy-manager:latest'
+    ports:
+      - '80:80'
+      - '81:81'
+      - '443:443'
+    volumes:
+      - ./config.json:/app/config/production.json
+      - ./data:/data
+      - ./letsencrypt:/etc/letsencrypt
+  db:
+    image: 'yobasystems/alpine-mariadb:latest'
+    environment:
+      MYSQL_ROOT_PASSWORD: 'npm'
+      MYSQL_DATABASE: 'npm'
+      MYSQL_USER: '<Yuser from above>'
+      MYSQL_PASSWORD: '<password from above>'
+    volumes:
+      - ./data/mysql:/var/lib/mysql
+      
+      # yeah cool we're good now. 
+      
+    > docker-compose up -d
+    
