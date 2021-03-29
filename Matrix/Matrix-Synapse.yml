@@ -6,3 +6,7 @@
 # Next we edit the script. i'll let you figure that out, everyone has differences.
 
 > sudo nano var/lib/docker/volumes/synapse-data/_data/homeserver.yaml
+
+# oh and this to start it. modified ofc
+
+docker run -d --name synapse --mount type=volume,src=synapse-data,dst=/data -p 8008:8008 -p 4143:443 matrixdotorg/synapse:v1.27.0rc1
